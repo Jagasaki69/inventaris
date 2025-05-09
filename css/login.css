@@ -1,0 +1,122 @@
+body {
+    /* Menggunakan warna BPBD (merah-orange) */
+    background: linear-gradient(45deg, #D63031, #E67E22);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    margin-top: 50px !important;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logo-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.logo-container img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: none;
+    padding: 15px;
+}
+
+.card-header h3 {
+    color: #1a237e;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+/* Form layout styles */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    border-radius: 10px;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #D63031;
+    box-shadow: 0 0 0 0.2rem rgba(214, 48, 49, 0.25);
+}
+
+.form-control::placeholder {
+    color: #9e9e9e;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #D63031, #E67E22);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(214, 48, 49, 0.4);
+    background: linear-gradient(45deg, #E67E22, #D63031);
+}
+
+.card-body {
+    padding: 30px;
+}
+
+.form-label {
+    color: #424242;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.input-group-text {
+    background: transparent;
+    border-right: none;
+}
+
+.login-icon {
+    color: #D63031;
+    margin-right: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card {
+        margin: 20px;
+    }
+    
+    .card-body {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
