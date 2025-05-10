@@ -151,18 +151,16 @@ require "function.php";
                         </div>
                     </div>
                 </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2020</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
+                <footer class="py-4" style="background-color: #e65100; color: white;">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div>
+                            &copy; <?= date('Y') ?> BPBD Kabupaten Kudus. Sistem Inventaris Logistik.
                         </div>
+                        
                     </div>
-                </footer>
+                </div>
+            </footer>
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
