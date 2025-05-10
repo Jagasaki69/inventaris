@@ -54,6 +54,9 @@ require "function.php";
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                     Tambah Barang Keluar
                                 </button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                    bantuan korban bencana
+                                </button>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
