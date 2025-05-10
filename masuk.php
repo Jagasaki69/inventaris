@@ -16,7 +16,9 @@ require "function.php";
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.php">Gudang log dan Alat</a>
+            <a class="navbar-brand" href="index.php">Gudang log dan Alat
+                <img src="assets/png/logobpbd_png.png" alt="Logo BPBD" style="height: 50px; margin-left: 560%; ">
+            </a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         </nav>
         <div id="layoutSidenav">
