@@ -10,11 +10,15 @@ if (isset($_SESSION["log"]) && $_SESSION["log"] === true) {
 
 // Cek apakah tombol login sudah ditekan atau belum
 if (isset($_POST["login"])) {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-
-    $ressult = mysqli_query($conn, "SELECT * FROM login WHERE email = '$email' and password = '$password'");// Query untuk mencari data yang sesuai
-    $count = mysqli_num_rows($ressult);// Menghitung jumlah data yang ditemukan
+    $email = mysqli_real_escape_string($conn, $_POST["email"]);
+    $password = mysqli_real_escape_string($conn, $_POST["password"]);
+    
+    // menggunakan prepared statement
+    $stmt = mysqli_prepare($conn, "SELECT * FROM login WHERE email = ? AND password = ?");
+    mysqli_stmt_bind_param($stmt, "ss", $email, $password);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $count = mysqli_num_rows($result);
 
     if ($count == 1) {
         $_SESSION["log"] = true; // Membuat session login
