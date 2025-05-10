@@ -3958,6 +3958,7 @@ input[type=button].btn-block {
 .navbar {
   position: relative;
   display: flex;
+  background-color: #e65100;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
