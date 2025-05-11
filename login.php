@@ -64,17 +64,17 @@ if (isset($_POST["login"])) {
                                     <form method="post">
                                         <div class="form-group">
                                             <label class="form-label" for="inputEmailAddress">
-                                                <i class="fas fa-envelope login-icon"></i>Email
+                                                <i class="fas fa-user login-icon"></i>Username
                                             </label>
                                             <input class="form-control" name="email" id="inputEmailAddress" 
-                                                   type="email" placeholder="Enter your email" required />
+                                                   type="text" placeholder="masukkan Username" required />
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label" for="inputPassword">
                                                 <i class="fas fa-lock login-icon"></i>Password
                                             </label>
                                             <input class="form-control" name="password" id="inputPassword" 
-                                                   type="password" placeholder="Enter your password" required />
+                                                   type="password" placeholder="masukkan Password" required />
                                         </div>
                                         <div class="form-group">
                                             <button class="btn btn-primary" name="login" type="submit">
