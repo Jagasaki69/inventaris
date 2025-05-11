@@ -36,7 +36,7 @@ require "function.php";
                             </a>
                             <a class="nav-link" href="keluar.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                barang Keluar
+                                Barang Keluar
                             </a>
                             <a class="nav-link" href="login.php">
                                 Logout
