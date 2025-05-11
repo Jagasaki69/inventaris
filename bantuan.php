@@ -1,6 +1,6 @@
 <?php
-session_start();
-require "function.php";
+require 'function.php';
+require 'cek.php';
 ?>
 
 <!DOCTYPE html>
@@ -15,6 +15,7 @@ require "function.php";
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
     </head>
     <body class="sb-nav-fixed">
+        <!-- Top Navigation -->
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <a class="navbar-brand" href="index.php">
                 Gudang Log dan Alat
@@ -24,6 +25,7 @@ require "function.php";
         </nav>
 
         <div id="layoutSidenav">
+            <!-- Side Navigation -->
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
@@ -52,14 +54,15 @@ require "function.php";
                 </nav>
             </div>
 
+            <!-- Main Content -->
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
                         <h1 class="mt-4">Bantuan Bencana</h1>
                         <div class="card mb-4">
                             <div class="card-header">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahBantuan">
-                                    Tambah Bantuan Bencana
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTambahBantuan">
+                                    Tambah Bantuan
                                 </button>
                             </div>
                             <div class="card-body">
@@ -79,27 +82,71 @@ require "function.php";
                                         </thead>
                                         <tbody>
                                         <?php
-                                            $query = mysqli_query($conn, "SELECT * FROM bantuan_bencana ORDER BY tanggal DESC");
+                                            $query = mysqli_query($conn, "SELECT b.*, 
+                                                GROUP_CONCAT(CONCAT(s.namabarang, ' (', d.jumlah, ')') SEPARATOR ', ') as detail_barang
+                                                FROM bantuan_bencana b
+                                                LEFT JOIN detail_bantuan d ON b.id_bantuan = d.id_bantuan
+                                                LEFT JOIN stock s ON d.id_barang = s.idbarang
+                                                GROUP BY b.id_bantuan
+                                                ORDER BY b.tanggal DESC");
                                             $no = 1;
                                             while($data = mysqli_fetch_array($query)){
                                         ?>
                                             <tr>
                                                 <td><?=$no++?></td>
-                                                <td><?=$data['tanggal']?></td>
+                                                <td><?=date('d/m/Y H:i', strtotime($data['tanggal']))?></td>
                                                 <td><?=$data['jenis_bencana']?></td>
                                                 <td><?=$data['lokasi_bencana']?></td>
                                                 <td><?=$data['penerima']?></td>
-                                                <td><?=$data['jenis_bantuan']?></td>
+                                                <td><?=$data['detail_barang']?></td>
                                                 <td><?=$data['status']?></td>
                                                 <td>
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit<?=$data['id_bantuan']?>">
+                                                     <div class="d-flex flex-column">
+                                                    <button type="button" class="btn btn-info btn-sm mb-1" data-toggle="modal" 
+                                                            data-target="#updateStatus<?=$data['id_bantuan']?>">
+                                                        Update Status
+                                                    </button>
+                                                    <button type="button" class="btn btn-warning btn-sm mb-1" data-toggle="modal" 
+                                                            data-target="#edit<?=$data['id_bantuan']?>">
                                                         Edit
                                                     </button>
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete<?=$data['id_bantuan']?>">
+                                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" 
+                                                            data-target="#delete<?=$data['id_bantuan']?>">
                                                         Delete
                                                     </button>
+                                                </div>
                                                 </td>
                                             </tr>
+
+                                            <!-- Modal Update Status -->
+                                            <div class="modal fade" id="updateStatus<?=$data['id_bantuan']?>">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Update Status Bantuan</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <form method="post">
+                                                            <div class="modal-body">
+                                                                <input type="hidden" name="id_bantuan" value="<?=$data['id_bantuan']?>">
+                                                                <div class="form-group">
+                                                                    <label>Status</label>
+                                                                    <select name="status" class="form-control" required>
+                                                                        <option value="Diproses" <?=$data['status']=='Diproses'?'selected':''?>>Diproses</option>
+                                                                        <option value="Dikirim" <?=$data['status']=='Dikirim'?'selected':''?>>Dikirim</option>
+                                                                        <option value="Diterima" <?=$data['status']=='Diterima'?'selected':''?>>Diterima</option>
+                                                                        <option value="Selesai" <?=$data['status']=='Selesai'?'selected':''?>>Selesai</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary" name="updateStatus">Update</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         <?php
                                             }
                                         ?>
@@ -110,18 +157,11 @@ require "function.php";
                         </div>
                     </div>
                 </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; BPBD Kabupaten Kudus <?= date('Y') ?></div>
-                        </div>
-                    </div>
-                </footer>
             </div>
         </div>
 
-        <!-- Modal Tambah -->
-        <div class="modal fade" id="tambahBantuan">
+        <!-- Modal Tambah Bantuan -->
+        <div class="modal fade" id="modalTambahBantuan">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -136,20 +176,25 @@ require "function.php";
                             </div>
                             <div class="form-group">
                                 <label>Lokasi Bencana</label>
-                                <input type="text" name="lokasi_bencana" class="form-control" required>
+                                <textarea name="lokasi_bencana" class="form-control" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Penerima</label>
                                 <input type="text" name="penerima" class="form-control" required>
                             </div>
-                            <div id="barang-container">
-                                <!-- Container untuk input barang dinamis -->
+                            <div class="form-group">
+                                <label>Kontak Penerima</label>
+                                <input type="text" name="kontak_penerima" class="form-control" pattern="[0-9+\-\s]+" required>
                             </div>
-                            <button type="button" class="btn btn-success" onclick="tambahBarang()">
-                                Tambah Barang
+                            <div id="barang-container">
+                                <!-- Container untuk barang bantuan -->
+                            </div>
+                            <button type="button" class="btn btn-success btn-sm" onclick="tambahBarang()">
+                                + Tambah Barang
                             </button>
                         </div>
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary" name="addBantuan">Submit</button>
                         </div>
                     </form>
@@ -157,40 +202,36 @@ require "function.php";
             </div>
         </div>
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Custom JavaScript -->
         <script>
-            // Script untuk menambah input barang secara dinamis
-            let barangCount = 0;
             function tambahBarang() {
-                barangCount++;
                 const container = document.getElementById('barang-container');
                 const div = document.createElement('div');
+                div.className = 'form-row mb-2';
                 div.innerHTML = `
-                    <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Barang ${barangCount}</label>
-                                <select name="barang[]" class="form-control" required>
-                                    <option value="">Pilih Barang</option>
-                                    <?php
-                                        $barang = mysqli_query($conn, "SELECT * FROM stock");
-                                        while($b = mysqli_fetch_array($barang)) {
-                                            echo "<option value='".$b['idbarang']."'>".$b['namabarang']."</option>";
-                                        }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Jumlah</label>
-                                <input type="number" name="jumlah[]" class="form-control" required>
-                            </div>
-                        </div>
+                    <div class="col-md-5">
+                        <select name="barang[]" class="form-control" required>
+                            <option value="">Pilih Barang</option>
+                            <?php
+                                $barang = mysqli_query($conn, "SELECT * FROM stock");
+                                while($b = mysqli_fetch_array($barang)) {
+                                    echo "<option value='".$b['idbarang']."'>".$b['namabarang']."</option>";
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <input type="number" name="jumlah[]" class="form-control" placeholder="Jumlah" required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-block" onclick="this.parentElement.parentElement.remove()">X</button>
                     </div>
                 `;
                 container.appendChild(div);

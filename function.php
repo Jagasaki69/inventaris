@@ -261,4 +261,124 @@ if (isset($_POST['hapusbarangkeluar'])) {
         exit;
     }
 }
+
+
+// Fungsi tambah bantuan bencana
+if(isset($_POST['addBantuan'])){
+    $jenis = htmlspecialchars($_POST['jenis_bencana']);
+    $lokasi = htmlspecialchars($_POST['lokasi_bencana']);
+    $penerima = htmlspecialchars($_POST['penerima']);
+    $kontak = htmlspecialchars($_POST['kontak_penerima']);
+    
+    // Insert data utama bantuan
+    $addtomain = mysqli_query($conn, "INSERT INTO bantuan_bencana (jenis_bencana, lokasi_bencana, penerima, kontak_penerima) 
+                                     VALUES ('$jenis','$lokasi','$penerima','$kontak')");
+    
+    if($addtomain){
+        $id_bantuan = mysqli_insert_id($conn);
+        
+        // Insert detail barang bantuan
+        if(isset($_POST['barang']) && isset($_POST['jumlah'])){
+            $barang = $_POST['barang'];
+            $jumlah = $_POST['jumlah'];
+            
+            $success = true;
+            
+            for($i = 0; $i < count($barang); $i++){
+                if(!empty($barang[$i]) && !empty($jumlah[$i])){
+                    // Cek stok tersedia
+                    $cekstok = mysqli_query($conn, "SELECT stock FROM stock WHERE idbarang='$barang[$i]'");
+                    $stokdata = mysqli_fetch_array($cekstok);
+                    
+                    if($stokdata['stock'] >= $jumlah[$i]){
+                        // Insert detail bantuan
+                        $addtodetail = mysqli_query($conn, "INSERT INTO detail_bantuan (id_bantuan, id_barang, jumlah) 
+                                                          VALUES ('$id_bantuan','$barang[$i]','$jumlah[$i]')");
+                        
+                        // Update stok
+                        $updatestock = mysqli_query($conn, "UPDATE stock SET stock = stock - $jumlah[$i] 
+                                                          WHERE idbarang = '$barang[$i]'");
+                        
+                        if(!$addtodetail || !$updatestock){
+                            $success = false;
+                            break;
+                        }
+                    } else {
+                        echo "<script>
+                            alert('Stok barang tidak mencukupi!');
+                            window.location.href='bantuan.php';
+                        </script>";
+                        return;
+                    }
+                }
+            }
+            
+            if($success){
+                echo "<script>
+                    alert('Bantuan berhasil ditambahkan');
+                    window.location.href='bantuan.php';
+                </script>";
+            } else {
+                echo "<script>
+                    alert('Gagal menambahkan detail bantuan');
+                    window.location.href='bantuan.php';
+                </script>";
+            }
+        }
+    } else {
+        echo "<script>
+            alert('Gagal menambahkan bantuan');
+            window.location.href='bantuan.php';
+        </script>";
+    }
+}
+
+// Fungsi update status bantuan
+if(isset($_POST['updateStatus'])){
+    $id_bantuan = $_POST['id_bantuan'];
+    $status = $_POST['status'];
+    
+    $updateStatus = mysqli_query($conn, "UPDATE bantuan_bencana SET status='$status' WHERE id_bantuan='$id_bantuan'");
+    
+    if($updateStatus){
+        echo "<script>
+            alert('Status bantuan berhasil diupdate');
+            window.location.href='bantuan.php';
+        </script>";
+    } else {
+        echo "<script>
+            alert('Gagal mengupdate status');
+            window.location.href='bantuan.php';
+        </script>";
+    }
+}
+
+// Fungsi hapus bantuan
+if(isset($_POST['deleteBantuan'])){
+    $id_bantuan = $_POST['id_bantuan'];
+    
+    // Kembalikan stok barang
+    $getDetail = mysqli_query($conn, "SELECT id_barang, jumlah FROM detail_bantuan WHERE id_bantuan='$id_bantuan'");
+    while($d = mysqli_fetch_array($getDetail)){
+        mysqli_query($conn, "UPDATE stock SET stock = stock + {$d['jumlah']} WHERE idbarang = '{$d['id_barang']}'");
+    }
+    
+    // Hapus detail bantuan
+    mysqli_query($conn, "DELETE FROM detail_bantuan WHERE id_bantuan='$id_bantuan'");
+    
+    // Hapus bantuan
+    $delete = mysqli_query($conn, "DELETE FROM bantuan_bencana WHERE id_bantuan='$id_bantuan'");
+    
+    if($delete){
+        echo "<script>
+            alert('Bantuan berhasil dihapus');
+            window.location.href='bantuan.php';
+        </script>";
+    } else {
+        echo "<script>
+            alert('Gagal menghapus bantuan');
+            window.location.href='bantuan.php';
+        </script>";
+    }
+}
 ?>
