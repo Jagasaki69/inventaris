@@ -17,9 +17,9 @@ require 'cek.php';
     <body class="sb-nav-fixed">
         <!-- Top Navigation -->
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.php">
-                Gudang Log dan Alat
-                <img src="assets/png/logobpbd.png" alt="Logo BPBD" style="height: 50px; margin-left: 560%;">
+            <a class="navbar-brand d-flex align-items-center" href="index.php">
+                <span>Gudang Log dan Alat</span>
+                <img src="assets/png/logobpbd.png" alt="Logo BPBD" style="height: 40px; margin-left: 20px;">
             </a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         </nav>
@@ -30,8 +30,9 @@ require 'cek.php';
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Menu Utama</div>
                             <a class="nav-link" href="index.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-warehouse"></i></div>
                                 Stock Barang
                             </a>
                             <a class="nav-link" href="masuk.php">
@@ -42,11 +43,13 @@ require 'cek.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-upload"></i></div>
                                 Barang Keluar
                             </a>
-                            <a class="nav-link" href="bantuan.php">
+                            <a class="nav-link active" href="bantuan.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-hands-helping"></i></div>
                                 Bantuan Bencana
                             </a>
+                            <div class="sb-sidenav-menu-heading">Account</div>
                             <a class="nav-link" href="logout.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
                                 Logout
                             </a>
                         </div>
@@ -60,10 +63,15 @@ require 'cek.php';
                     <div class="container-fluid">
                         <h1 class="mt-4">Bantuan Bencana</h1>
                         <div class="card mb-4">
-                            <div class="card-header">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTambahBantuan">
-                                    Tambah Bantuan
-                                </button>
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalTambahBantuan">
+                                        <i class="fas fa-plus mr-1"></i>Tambah Bantuan
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="exportBantuanExcel()">
+                                        <i class="fas fa-file-excel mr-1"></i>Export Excel
+                                    </button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -147,6 +155,71 @@ require 'cek.php';
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <!-- Modal Edit Bantuan -->
+                                            <div class="modal fade" id="edit<?=$data['id_bantuan']?>">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Edit Bantuan Bencana</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <form method="post">
+                                                            <div class="modal-body">
+                                                                <input type="hidden" name="id_bantuan" value="<?=$data['id_bantuan']?>">
+                                                                <div class="form-group">
+                                                                    <label>Jenis Bencana</label>
+                                                                    <input type="text" name="jenis_bencana" class="form-control" 
+                                                                           value="<?=$data['jenis_bencana']?>" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Lokasi Bencana</label>
+                                                                    <textarea name="lokasi_bencana" class="form-control" required><?=$data['lokasi_bencana']?></textarea>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Penerima</label>
+                                                                    <input type="text" name="penerima" class="form-control" 
+                                                                           value="<?=$data['penerima']?>" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Kontak Penerima</label>
+                                                                    <input type="text" name="kontak_penerima" class="form-control" 
+                                                                           pattern="[0-9+\-\s]+" value="<?=$data['kontak_penerima']?>" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-warning" name="editBantuan">Update</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Modal Delete Bantuan -->
+                                            <div class="modal fade" id="delete<?=$data['id_bantuan']?>">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Hapus Bantuan Bencana</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <form method="post">
+                                                            <div class="modal-body">
+                                                                <input type="hidden" name="id_bantuan" value="<?=$data['id_bantuan']?>">
+                                                                <p>Apakah Anda yakin ingin menghapus data bantuan ini?</p>
+                                                                <p>Jenis Bencana: <b><?=$data['jenis_bencana']?></b></p>
+                                                                <p>Lokasi: <b><?=$data['lokasi_bencana']?></b></p>
+                                                                <p>Penerima: <b><?=$data['penerima']?></b></p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-danger" name="deleteBantuan">Delete</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         <?php
                                             }
                                         ?>
@@ -157,6 +230,14 @@ require 'cek.php';
                         </div>
                     </div>
                 </main>
+
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; BPBD Kabupaten Kudus <?= date('Y') ?></div>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </div>
 
@@ -211,6 +292,10 @@ require 'cek.php';
 
         <!-- Custom JavaScript -->
         <script>
+            $(document).ready(function() {
+                $('#dataTable').DataTable();
+            });
+
             function tambahBarang() {
                 const container = document.getElementById('barang-container');
                 const div = document.createElement('div');
@@ -235,6 +320,10 @@ require 'cek.php';
                     </div>
                 `;
                 container.appendChild(div);
+            }
+
+            function exportBantuanExcel() {
+                window.location.href = 'export_bantuan.php';
             }
         </script>
     </body>

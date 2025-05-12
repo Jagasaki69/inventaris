@@ -10,17 +10,87 @@ if (!$conn) {
 
 // Menambahkan barang baru
 if (isset($_POST["addnewbarang"])) {
-    $namabarang = $_POST["namabarang"];
-    $deskripsi = $_POST["deskripsi"];
-    $stock = $_POST['stock'];
+    $namabarang = htmlspecialchars($_POST["namabarang"]);
+    $deskripsi = htmlspecialchars($_POST["deskripsi"]);
+    $stock = htmlspecialchars($_POST['stock']);
+    $sumber = htmlspecialchars($_POST['sumber']);
 
-    $addtotable = mysqli_query($conn, "INSERT INTO stock (namabarang, deskripsi, stock) VALUES ('$namabarang', '$deskripsi', '$stock')");
-    if ($addtotable) {
-        header('location:index.php');
-        exit;
+    // Check if item with same name and description exists
+    $check_duplicate = mysqli_query($conn, "SELECT * FROM stock 
+                                          WHERE namabarang = '$namabarang' 
+                                          AND deskripsi = '$deskripsi'");
+    
+    if(mysqli_num_rows($check_duplicate) > 0) {
+        // Item exists, update quantity
+        $existing_item = mysqli_fetch_array($check_duplicate);
+        $idbarang = $existing_item['idbarang'];
+        $new_stock = $existing_item['stock'] + $stock;
+        
+        $update_stock = mysqli_query($conn, "UPDATE stock 
+                                           SET stock = '$new_stock' 
+                                           WHERE idbarang = '$idbarang'");
+        
+        if($update_stock) {
+            // Record in masuk table
+            $addtomasuk = mysqli_query($conn, "INSERT INTO masuk (idbarang, jumlah, sumber) 
+                                              VALUES ('$idbarang','$stock','$sumber')");
+            
+            if($addtomasuk) {
+                echo "
+                <script>
+                    alert('Stock berhasil ditambahkan!');
+                    window.location.href='index.php';
+                </script>
+                ";
+            } else {
+                echo "
+                <script>
+                    alert('Gagal mencatat history!');
+                    window.location.href='index.php';
+                </script>
+                ";
+            }
+        } else {
+            echo "
+            <script>
+                alert('Gagal update stock!');
+                window.location.href='index.php';
+            </script>
+            ";
+        }
     } else {
-        echo "Gagal: " . mysqli_error($conn);
-        exit;
+        // New item, insert new row
+        $addtotable = mysqli_query($conn, "INSERT INTO stock (namabarang, deskripsi, stock) 
+                                          VALUES ('$namabarang','$deskripsi','$stock')");
+        
+        if($addtotable) {
+            $idbarang = mysqli_insert_id($conn);
+            $addtomasuk = mysqli_query($conn, "INSERT INTO masuk (idbarang, jumlah, sumber) 
+                                              VALUES ('$idbarang','$stock','$sumber')");
+            
+            if($addtomasuk) {
+                echo "
+                <script>
+                    alert('Barang berhasil ditambahkan!');
+                    window.location.href='index.php';
+                </script>
+                ";
+            } else {
+                echo "
+                <script>
+                    alert('Gagal mencatat history!');
+                    window.location.href='index.php';
+                </script>
+                ";
+            }
+        } else {
+            echo "
+            <script>
+                alert('Gagal menambahkan barang baru!');
+                window.location.href='index.php';
+            </script>
+            ";
+        }
     }
 }
 
