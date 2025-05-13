@@ -27,7 +27,6 @@ require "function.php";
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Menu</div>
                         <a class="nav-link active" href="index.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-warehouse"></i></div>
                             Stock Barang
