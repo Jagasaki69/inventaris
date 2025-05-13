@@ -19,7 +19,7 @@ require 'cek.php';
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <a class="navbar-brand d-flex align-items-center" href="index.php">
                 <span>Gudang Log dan Alat</span>
-                <img src="assets/png/logobpbd.png" alt="Logo BPBD" style="height: 40px; margin-left: 20px;">
+                <img src="assets/png/logobpbd.png" alt="Logo BPBD" style="height: 40px; margin-left: 1060px;">
             </a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         </nav>

@@ -13,14 +13,15 @@ require "function.php";
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 </head>
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.php">
-            Gudang Log dan Alat
-            <img src="assets/img/logobpbd.png" alt="Logo BPBD" style="height: 40px; margin-left: 10px;">
-        </a>
+    <!-- Navigation top Bar -->
+      <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand d-flex align-items-center" href="index.php">
+                <span>Gudang Log dan Alat</span>
+                <img src="assets/png/logobpbd.png" alt="Logo BPBD" style="height: 40px; margin-left: 1060px;">
+            </a>
         <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
     </nav>
-
+    <!-- Sidebar -->
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
