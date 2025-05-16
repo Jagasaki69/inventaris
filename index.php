@@ -63,9 +63,9 @@ require "function.php";
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                     <i class="fas fa-plus"></i> Tambah Barang
                                 </button>
-                                <button type="button" class="btn btn-success" onclick="exportToExcel()">
-                                    <i class="fas fa-file-excel"></i> Export Excel
-                                </button>
+                                <a href="export.php" class="btn btn-success">
+                                    <i class="fas fa-file-excel"></i> Export
+                                </a>
                             </div>
                         </div>
                         <div class="card-body">
