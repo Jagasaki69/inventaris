@@ -63,7 +63,7 @@ require "function.php";
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                     <i class="fas fa-plus"></i> Tambah Barang
                                 </button>
-                                <a href="exportmasuk.php" class="btn btn-success">
+                                <a href="exportgudang.php" class="btn btn-success">
                                     <i class="fas fa-file-excel"></i> Export
                                 </a>
                             </div>
