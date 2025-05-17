@@ -61,9 +61,9 @@ require 'cek.php';
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <div>
-                                <button type="button" class="btn btn-success" onclick="exportMasukExcel()">
+                                <a type="button" class="btn btn-success" href="exportmasuk.php">
                                     <i class="fas fa-file-excel mr-1"></i>Export Excel
-                                </button>
+                                </a>
                             </div>
                         </div>
                         <div class="card-body">
