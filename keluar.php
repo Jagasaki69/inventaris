@@ -64,8 +64,8 @@ require 'cek.php';
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
                                     <i class="fas fa-plus mr-1"></i>Tambah Barang Keluar
                                 </button>
-                                <button type="button" class="btn btn-success" onclick="exportKeluarExcel()">
-                                    <i class="fas fa-file-excel mr-1"></i>Export Excel
+                                <button type="button" class="btn btn-success" onclick="location.href='exportkeluar.php'">
+                                    <i class="fas fa-file-excel mr-1"></i>Export
                                 </button>
                             </div>
                         </div>

@@ -62,7 +62,7 @@ require 'cek.php';
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <div>
                                 <a type="button" class="btn btn-success" href="exportmasuk.php">
-                                    <i class="fas fa-file-excel mr-1"></i>Export Excel
+                                    <i class="fas fa-file-excel mr-1"></i>Export
                                 </a>
                             </div>
                         </div>
